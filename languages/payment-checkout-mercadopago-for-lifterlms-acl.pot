@@ -1,0 +1,93 @@
+#: Payment Checkout PagSeguro for LifterLMS en_US translation
+msgid "E-mail of Mercado Pago"
+msgstr ""
+
+msgid "E-mail registred in the administrative area of Mercado Pago."
+msgstr ""
+
+msgid "Mercado Pago Token"
+msgstr ""
+
+msgid "API service key of Mercado Pago."
+msgstr ""
+
+msgid "Type of environment"
+msgstr ""
+
+msgid "Enable environment of test or production."
+msgstr ""
+
+msgid "Sandbox"
+msgstr ""
+
+msgid "Production"
+msgstr ""
+
+msgid "Activation Error:"
+msgstr ""
+
+msgid "You must have"
+msgstr ""
+
+msgid "LifterLMS"
+msgstr ""
+
+msgid "version"
+msgstr ""
+
+msgid "for the LifterLMS Mercado Pago to activate."
+msgstr ""
+
+msgid "plugin installed and activated for the LifterLMS Mercado Pago."
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Check the payment area below."
+msgstr ""
+
+msgid "Payment Instructions"
+msgstr ""
+
+msgid "Payment Area"
+msgstr ""
+
+msgid "Secure payment by SSL encryption."
+msgstr ""
+
+msgid "Pay"
+msgstr ""
+
+msgid "Mercado Pago Checkout Payment"
+msgstr ""
+
+msgid "Mercado Pago payment methods logos"
+msgstr ""
+
+msgid "This site accepts payments with the most of flags and banks, balance in Mercado Pago account and bank slip."
+msgstr ""
+
+msgid "Pay with Mercado Pago by clicking on button &ldquo;Pay&rdquo; right below"
+msgstr ""
+
+msgid "Not secure payment by SSL encryption."
+msgstr ""
+
+msgid "This gateway cannot process transactions for less than R$ 5,00."
+msgstr ""
+
+msgid "Mercado Pago (v1)"
+msgstr ""
+
+msgid "Allow customers to purchase courses and memberships using Mercado Pago."
+msgstr ""
+
+msgid "Mercado Pago Checkout"
+msgstr ""
+
+msgid "Payment via Mercado Pago checkout"
+msgstr "Payment via Mercado Pago checkout"
+
+msgid "Enable new payment methods to LifterLMS using Mercado Pago API v1."
+msgstr ""

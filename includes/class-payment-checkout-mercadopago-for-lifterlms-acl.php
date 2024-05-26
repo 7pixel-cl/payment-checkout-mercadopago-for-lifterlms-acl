@@ -122,6 +122,23 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-payment-checkout-mercadopago-for-lifterlms-acl-public.php';
 
+		/**
+		 * The file responsible for useful functions of plugin.
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-payment-checkout-mercadopago-for-lifterlms-helper.php';
+
+		/**
+		 * The class responsible for Mercado Pago gateway.
+		 */
+
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-payment-checkout-mercadopago-for-lifterlms-acl-gateway.php';
+
+		/**
+		 * The class responsible for plugin updater checker of plugin.
+		 */
+		include_once plugin_dir_path( __DIR__ ) . 'includes/plugin-updater/plugin-update-checker.php';
+
+
 		$this->loader = new Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Loader();
 
 	}
@@ -144,6 +161,43 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl {
 	}
 
 	/**
+	 * Add Mercado Pago Payment to Lifter LMS
+	 *
+	 * @since 1.0.0
+	 */
+
+	public static function add_gateway($gateways) {
+		$gateways[] = 'Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Gateway';
+		return $gateways;
+	}
+
+	/**
+	 * Routes register
+	 *
+	 * @since 1.0.0
+	 */
+
+	public function listener_register_routes(): void {
+		register_rest_route( 'payment-checkout-mercadopago-for-lifterlms-acl/v1', '/notification', array(
+			'methods' => 'POST',
+			'callback' => array( 'Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Gateway', 'mercadoPago_listener' ),
+			'permission_callback' => __return_empty_string(),
+		) );
+	}
+
+	public function updater_init():?object {
+		if(class_exists('ACL_Puc_Plugin_UpdateChecker')){
+			return new ACL_Puc_Plugin_UpdateChecker(
+				'https://api.linknacional.com.br/v2/u/?slug=payment-checkout-pagseguro-for-lifterlms',
+				PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_FILE,
+				PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG
+			);
+		}else{
+			return null;
+		}
+	}
+
+	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
@@ -153,10 +207,11 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Admin( $this->get_plugin_name(), $this->get_version() );
-
+		$this->loader->add_filter('plugin_action_links_' . PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_BASENAME, 'ACL_Payment_Checkout_MercadoPago_For_Lifterlms_Helper', 'add_plugin_row_meta', 10, 2);
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		$this->loader->add_action( 'init', $this, 'updater_init' );
+		$this->loader->add_action( 'plugins_loaded', 'ACL_Payment_Checkout_MercadoPago_For_Lifterlms_Helper', 'verify_plugin_dependencies', 999 );
 	}
 
 	/**
@@ -171,6 +226,10 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl {
 		$plugin_public = new Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+
+		$this->loader->add_filter( 'lifterlms_payment_gateways', $this, 'add_gateway' );
+		$this->loader->add_action( 'rest_api_init', $this, 'listener_register_routes' );
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 	}

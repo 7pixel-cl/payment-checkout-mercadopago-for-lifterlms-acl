@@ -54,6 +54,45 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Admin {
 
 	}
 
+	public static function add_settings_fields($default_fields, $gateway_id) {
+		$gateway = ACL_Payment_Checkout_MercadoPago_For_Lifterlms_Helper::get_lifter_gateway( 'mercadopago-v1' );
+
+		$fields = array();
+
+		// Field for Payment instructions.
+		$fields[] = array(
+			'id' => $gateway->get_option_name( 'payment_instructions' ),
+            'desc' => '<br>' . __( 'Displayed to the user when this gateway is selected during checkout. Add information here instructing the student on how to send payment.', 'lifterlms' ),
+			'title' => __( 'Payment Instructions', 'lifterlms' ),
+			'type' => 'textarea',
+		);
+
+		$fields[] = array(
+			'id' => $gateway->get_option_name( 'email' ),
+			'title' => __( 'E-mail of Mercado Pago', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG ),
+			'desc' => '<br>' . __( 'E-mail registered in the administrative area of Mercado Pago.', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG ),
+			'type' => 'text',
+		);
+		// TODO: Change to Mercado Pago
+		$fields[] = array(
+			'id' => $gateway->get_option_name( 'env_type' ),
+			'title' => __( 'Type of environment', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG ),
+			'desc' => '<br>' . __('Enable environment of test or production.', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG),
+			'type' => 'radio',
+			'default' => 'sandbox',
+			'options' => array(
+				'sandbox' => __('Sandbox', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG),
+				'production' => __('Production', PAYMENT_CHECKOUT_MERCADOPAGO_FOR_LIFTERLMS_ACL_SLUG),
+			),
+		);
+
+		if ($gateway->id === $gateway_id){
+			$default_fields = array_merge($default_fields, $fields);
+		}
+		return $default_fields;
+	}
+
+	// TODO: Check if needed to remove
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
@@ -99,5 +138,7 @@ class Payment_Checkout_Mercadopago_For_Lifterlms_Acl_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/payment-checkout-mercadopago-for-lifterlms-acl-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+
 
 }
